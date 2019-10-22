@@ -29,24 +29,9 @@ typedef struct {
 #define PIXEL(i,j) ((i)+(j)*XSIZE)
 
 /********** SUBTASK1: Create kernel device_calculate *************************/
-__global__ void device_calculate(double xleft, double yupper, double step, int *device_pixel_GPU) {
-	//A single pixel is assigned to each tread in each of the blocks of the block matrix
-	int i = blockIdx.x * BLOCKX + threadIdx.x;
-	int j = blockIdx.y * BLOCKY + threadIdx.y;
-	
-	my_complex_t c,z,temp;
-	int iter=0;
-	c.real = (xleft + step*i);
-	c.imag = (yupper - step*j);
-	z = c;
-	while(z.real*z.real + z.imag*z.imag<4.0) {
-		temp.real = z.real*z.real - z.imag*z.imag + c.real;
-		temp.imag = 2.0*z.real*z.imag + c.imag;
-		z = temp;
-		if(++iter==MAXITER) break;
-	}
-	device_pixel_GPU[PIXEL(i,j)]=iter;
-}
+
+//Insert code here
+
 /********** SUBTASK1 END *****************************************************/
 
 void host_calculate() {
@@ -135,15 +120,16 @@ int main(int argc,char **argv) {
 	hosttime+=walltime()-start;
 
 	/********** SUBTASK2: Set up device memory *******************************/
-	int *device_pixel_GPU;
-	cudaMalloc((void**)&device_pixel_GPU, XSIZE * YSIZE * sizeof(int));
+
+	// Insert code here
+
 	/********** SUBTASK2 END *************************************************/
 
 	start=walltime();
 	/********** SUBTASK3: Execute the kernel on the device *******************/
-	dim3 gridBlock(XSIZE/BLOCKX, YSIZE/BLOCKY); //Set the number of blocks accordingly to the image size
-	dim3 threadBlock(BLOCKX, BLOCKY); //Each block will have BLOCKX * BLOCKY threads (64 in this case)
-	device_calculate<<<gridBlock,threadBlock>>>(xleft,yupper,step,device_pixel_GPU);
+
+	//Insert code here
+
 	/********** SUBTASK3 END *************************************************/
 	
 	devicetime+=walltime()-start;
@@ -151,13 +137,17 @@ int main(int argc,char **argv) {
 	start=walltime();
 	
 	/********** SUBTASK4: Transfer the result from device to device_pixel[][]*/
-	cudaMemcpy(device_pixel, device_pixel_GPU, XSIZE * YSIZE * sizeof(int), cudaMemcpyDeviceToHost);
+
+	//Insert code here
+
 	/********** SUBTASK4 END *************************************************/
 	
 	memtime+=walltime()-start;
 
 	/********** SUBTASK5: Free the device memory also ************************/
-	cudaFree(device_pixel_GPU);
+
+	//Insert code here
+
 	/********** SUBTASK5 END *************************************************/
 
 	int errors=0;
